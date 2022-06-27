@@ -6,12 +6,41 @@ Vocab is a simple CLI utility that takes a text file and finds the most frequent
 
 I wanted an easy way to extract key vocabulary terms from a story in Spanish so I could learn the most common terms.
 
+## Installation
+
+### Using go
+
+This requires go `1.18+`. Replace `<version>` with the latest release.
+
+```sh
+go install github.com/russellsteadman/vocab@<version>
+```
+
+If the `vocab` term is not available in your terminal, make sure your `$GO_PATH/bin` is in your `$PATH`.
+
+### Via releases
+
+Download the executable for your operating system and architecture from releases. You can then move the binary to a location in the path, or just use it locally.
+
+```sh
+# For MacOS (darwin)/Linux platforms
+chmod +x ./vocab
+./vocab --help
+```
+
+```bat
+:: For Windows platforms
+.\vocab --help
+```
+
+Note that these binaries are not signed and will raise "unidentified developer" errors. Code signing may be added in the future with enough usage.
+
 ## Usage
 
 If you have an `.mobi`, `.epub`, or other format, convert the file into a `.txt` text file. There are many online converters available to do so.
 
 ```sh
-$ vocab --help
+vocab --help
 ```
 
 ```txt
@@ -33,25 +62,25 @@ Options:
 Get all words in order of usage:
 
 ```sh
-$ vocab -i book.txt -o book-vocab.txt
+vocab -i book.txt -o book-vocab.txt
 ```
 
 Get top 100 words:
 
 ```sh
-$ vocab -i book.txt -o book-vocab.txt -c 100
+vocab -i book.txt -o book-vocab.txt -c 100
 ```
 
 Get words with 10 or more uses:
 
 ```sh
-$ vocab -i charlie.txt -o charlie-vocab.txt -t 10
+vocab -i charlie.txt -o charlie-vocab.txt -t 10
 ```
 
 Get all words in order of count without additional markup:
 
 ```sh
-$ vocab -i charlie.txt -o charlie-vocab.txt -s
+vocab -i charlie.txt -o charlie-vocab.txt -s
 ```
 
 ## License
