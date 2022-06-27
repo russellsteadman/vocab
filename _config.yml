@@ -1,0 +1,4 @@
+remote_theme: pages-themes/cayman@v0.2.0
+title: Vocab Tool
+description: A simple CLI tool for extracting common vocabulary from text files
+show_downloads: true
