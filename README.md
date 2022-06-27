@@ -44,7 +44,7 @@ vocab --help
 ```
 
 ```txt
-Usage: vocab 0.1.0
+Usage: vocab v0.2.0
 Vocab is a tool for generating a vocabulary file from a text file.
 
 Options:
@@ -55,6 +55,7 @@ Options:
   -t, --thresh                  The minimum word count to include in the output
   -c, --count                   The maximum number of words to include in the output
   -s, --simple                  Only emit the words, not the counts
+  -g, --group                   Group words into # word groups
 ```
 
 ## Examples
@@ -81,6 +82,12 @@ Get all words in order of count without additional markup:
 
 ```sh
 vocab -i charlie.txt -o charlie-vocab.txt -s
+```
+
+Get groups of 3 words sorted by usage:
+
+```sh
+vocab -i charlie.txt -o charlie-vocab.txt -g 3
 ```
 
 ## License

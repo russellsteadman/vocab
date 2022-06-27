@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-const version = "0.1.0"
+const version = "v0.2.0"
 
 func printHelp() {
 	fmt.Printf("Usage: vocab %s\n", version)
@@ -25,6 +25,7 @@ func printHelp() {
 	fmt.Println("  -t, --thresh\t\t\tThe minimum word count to include in the output")
 	fmt.Println("  -c, --count\t\t\tThe maximum number of words to include in the output")
 	fmt.Println("  -s, --simple\t\t\tOnly emit the words, not the counts")
+	fmt.Println("  -g, --group\t\t\tGroup words into # word groups")
 }
 
 var wordRegex = regexp.MustCompile("(?i)[^-'0-9a-zÀ-ÿ`]")
@@ -48,6 +49,8 @@ func main() {
 	}
 
 	simple := false
+	group := 1
+	var err error
 
 	for i, arg := range args {
 		if arg == "-h" || arg == "--help" {
@@ -74,6 +77,15 @@ func main() {
 			}
 		} else if arg == "-s" || arg == "--simple" {
 			simple = true
+		} else if arg == "-g" || arg == "--group" {
+			if i+1 < len(args) {
+				group, err = strconv.Atoi(args[i+1])
+				if err != nil {
+					fmt.Print("Missing group number (e.g. 2)\n\n")
+					printHelp()
+					return
+				}
+			}
 		}
 	}
 
@@ -116,6 +128,13 @@ func main() {
 		if word != "" {
 			fileWordsFormatted = append(fileWordsFormatted, word)
 		}
+	}
+
+	if group > 1 {
+		for i := 0; i <= len(fileWordsFormatted)-group; i++ {
+			fileWordsFormatted[i] = strings.Join(fileWordsFormatted[i:i+group], " ")
+		}
+		fileWordsFormatted = fileWordsFormatted[:len(fileWordsFormatted)-group+1]
 	}
 
 	wordCount := make(map[string]int, len(fileWordsFormatted))
