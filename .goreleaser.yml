@@ -6,3 +6,7 @@ builds:
       - linux
       - darwin
       - windows
+
+signs:
+  - id: "vocab"
+    artifacts: all
