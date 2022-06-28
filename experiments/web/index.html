@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Vocab Tool | vocab</title>
+  <script src="/experiments/web/wasm_exec.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-base64@3.7.2/base64.js"
+    integrity="sha256-YlNP+E00DGa+9/WOYMY1qKEvUUBwmkzcwFwVYoY4rdQ=" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+    integrity="sha256-YvdLHPgkqJ8DVUxjjnGVlMMJtNimJ6dYkowFFvp4kKs=" crossorigin="anonymous">
+  <script>
+    const go = new Go();
+    WebAssembly.instantiateStreaming(fetch("/experiments/web/vocab.wasm"), go.importObject).then((result) => {
+      go.run(result.instance);
+    });
+  </script>
+</head>
+
+<body class="container py-3">
+  <h1>vocab</h1>
+  <form id="form">
+    <p>Select a .txt file and click submit to create a vocabulary list.</p>
+    <input type="file" id="file" accept="text/plain" class="form-control mb-3" />
+
+    <label for="thresh" class="form-label">Threshold</label>
+    <input type="number" id="thresh" class="form-control mb-2" value="0" min="0" required />
+    <div class="mb-3 small text-muted">This is the minimum number of uses for a word or phrase to be returned. Cannot be
+      used with maximum word count.</div>
+
+    <label for="count" class="form-label">Maximum Word Count</label>
+    <input type="number" id="count" class="form-control" value="0" min="0" required />
+    <div class="mb-3 small text-muted">This is the number of words or phrases to return. Cannot be used with threshold.
+    </div>
+
+    <label for="group" class="form-label">Word Grouping</label>
+    <input type="number" id="group" class="form-control" value="1" min="1" required />
+    <div class="mb-3 small text-muted">This is the number of words per term. You can increase this to create phrase
+      lists.</div>
+
+    <div class="form-check mb-3">
+      <input class="form-check-input" type="checkbox" value="" id="simple">
+      <label class="form-check-label" for="flexCheckDefault">
+        Use Simple Output (i.e. just the terms)
+      </label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create Vocabulary List</button>
+  </form>
+
+  <h3 class="mt-3">Output</h3>
+  <textarea class="form-control" id="output" readonly style="min-height: 300px;"></textarea>
+
+  <script>
+    const output = document.getElementById("output");
+
+    const thresh = document.getElementById("thresh");
+    const count = document.getElementById("count");
+    const group = document.getElementById("group");
+    const simple = document.getElementById("simple");
+
+    document.getElementById('form').addEventListener('submit', (ev) => {
+      ev.preventDefault();
+
+      const file = document.getElementById('file').files[0];
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        const file = reader.result.split(",").pop();
+
+        const rawInput = JSON.stringify({
+          file,
+          threshold: Number(thresh.value),
+          count: Number(count.value),
+          group: Number(group.value),
+          simple: simple.checked
+        });
+        const vocabRaw = createVocab(rawInput);
+
+        const vocab = JSON.parse(vocabRaw);
+        if (vocab.error) {
+          output.value = vocab.message;
+        } else {
+          output.value = Base64.decode(vocab.data);
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+  </script>
+</body>
+
+</html>
