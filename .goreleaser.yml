@@ -2,11 +2,14 @@ builds:
   - main: .
     id: "vocab"
     binary: vocab
-    goos:
-      - linux
-      - darwin
-      - windows
-      - js
+    targets:
+      - windows_arm64
+      - windows_amd64
+      - darwin_arm64
+      - darwin_amd64
+      - linux_arm64
+      - linux_amd64
+      - js_wasm
 
 signs:
   - id: "vocab"
