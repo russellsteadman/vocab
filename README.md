@@ -6,6 +6,10 @@ Vocab is a simple CLI utility that takes a text file and finds the most frequent
 
 I wanted an easy way to extract key vocabulary terms from a story in Spanish so I could learn the most common terms.
 
+## Online Version
+
+If you want to try out this tool or use it without installation, try the [experimental web version](https://vocab.docs.russellsteadman.com/experiments/web/). You can use all of the CLI features in your browser without any information leaving your device.
+
 ## Installation
 
 ### Using go
@@ -35,7 +39,7 @@ chmod +x ./vocab
 
 Note that these binaries are not signed and will raise "unidentified developer" errors. Code signing may be added in the future with enough usage.
 
-## Usage
+## Usage (Command-line)
 
 If you have an `.mobi`, `.epub`, or other format, convert the file into a `.txt` text file. There are many online converters available to do so.
 
